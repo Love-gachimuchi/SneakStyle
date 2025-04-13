@@ -4,84 +4,8 @@
   <meta charset="UTF-8" />
   <title>SneakStyle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .page { display: none; }
-    .page.active { display: block; }
-  </style>
-</head>
-<body class="bg-gray-100 pt-16 pb-24 font-sans">
+  <script src="https://cdn.tailwindcss.com">
 
-  <!-- Верхнее меню -->
-  <header class="fixed top-0 left-0 right-0 bg-white shadow z-50">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-      <h1 class="text-xl font-bold text-black">SneakStyle</h1>
-      <nav class="space-x-4 text-sm text-gray-700">
-        <button onclick="showPage('mainPage')" class="hover:text-black">🏠 Главная</button>
-        <button onclick="showPage('cartPage'); loadCart()" class="hover:text-black">🛒 Корзина</button>
-        <button onclick="showPage('checkoutPage')" class="hover:text-black">💳 Оформление</button>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Регистрация -->
-  <div id="authPage" class="page active">
-    <div class="flex flex-col items-center justify-center h-screen px-4">
-      <h2 class="text-2xl font-bold mb-4">Добро пожаловать в SneakStyle</h2>
-      <input id="phoneInput" type="tel" placeholder="Номер телефона" pattern="^\+7\d{10}$" title="Введите номер в формате +7XXXXXXXXXX" class="mb-2 p-2 border rounded w-full max-w-xs" required>
-      <input id="emailInput" type="email" placeholder="Email" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Введите действительный адрес Gmail" class="mb-2 p-2 border rounded w-full max-w-xs" required>
-      <button onclick="proceedToMain()" class="bg-black text-white px-4 py-2 rounded w-full max-w-xs">Продолжить</button>
-    </div>
-  </div>
-
-  <!-- Главная -->
-  <div id="mainPage" class="page">
-    <div class="p-4 flex flex-col sm:flex-row gap-3">
-      <input id="searchInput" oninput="renderProducts()" type="text" placeholder="Поиск" class="p-2 rounded border w-full sm:w-1/3" />
-      <input id="minPrice" oninput="renderProducts()" type="number" placeholder="Мин цена" class="p-2 rounded border w-full sm:w-1/6" />
-      <input id="maxPrice" oninput="renderProducts()" type="number" placeholder="Макс цена" class="p-2 rounded border w-full sm:w-1/6" />
-    </div>
-    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="product-list"></div>
-  </div>
-
-  <!-- Страница товара -->
-  <div id="productPage" class="page">
-    <header class="p-4 bg-white shadow flex justify-between items-center">
-      <button onclick="showPage('mainPage')" class="text-blue-600 underline">← Назад</button>
-      <h2 class="text-lg font-bold">Товар</h2>
-    </header>
-    <div id="productDetails" class="p-4"></div>
-  </div>
-
-  <!-- Корзина -->
-  <div id="cartPage" class="page">
-    <header class="p-4 bg-white shadow flex justify-between items-center">
-      <h2 class="text-xl font-bold">Корзина</h2>
-      <button onclick="showPage('mainPage')" class="text-blue-500 underline">← Назад</button>
-    </header>
-    <section class="p-4" id="cart-items"></section>
-  </div>
-
-  <!-- Оформление -->
-  <div id="checkoutPage" class="page">
-    <header class="p-4 bg-white shadow flex justify-between items-center">
-      <h2 class="text-xl font-bold">Оформление заказа</h2>
-      <button onclick="showPage('cartPage')" class="text-blue-500 underline">← Назад</button>
-    </header>
-    <div class="p-4 space-y-4">
-      <p class="text-lg">Выберите способ оплаты:</p>
-      <button onclick="confirmOrder('Telegram')" class="w-full bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 rounded">Связаться в Telegram</button>
-    </div>
-  </div>
-
-  <!-- Подтверждение -->
-  <div id="confirmationPage" class="page text-center p-8">
-    <h2 class="text-2xl font-bold mb-4">Спасибо за заказ! 🎉</h2>
-    <p id="orderMessage" class="text-lg mb-6"></p>
-    <button onclick="clearCartAndReturn()" class="bg-black text-white px-6 py-2 rounded">На главную</button>
-  </div>
-
-  <script>
     const products = [
       {
         name: "NIKE Air Force 1 '07",
@@ -120,21 +44,6 @@
         description: "Классическая модель от New Balance с обновленным дизайном и комфортом.",
       },
     ];
-
-    function proceedToMain() {
-      const phone = document.getElementById('phoneInput').value;
-      const email = document.getElementById('emailInput').value;
-      if (!phone.match(/^\+7\d{10}$/) && !email.match(/^[a-zA-Z0-9._%+-]+@gmail\.com$/)) {
-        alert('Введите действительный номер телефона или Gmail');
-        return;
-      }
-      showPage('mainPage');
-    }
-
-    function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
 
     function renderProducts() {
       const search = document.getElementById("searchInput").value.toLowerCase();
@@ -235,6 +144,102 @@
     }
 
     renderProducts();
+  <style>
+    .page { display: none; }
+    .page.active { display: block; }
+    #mainHeader { display: none; }
+  </style>
+</head>
+<body class="bg-gray-100 pt-16 pb-24 font-sans">
+
+  <!-- Верхнее меню -->
+  <header id="mainHeader" class="fixed top-0 left-0 right-0 bg-white shadow z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-black">SneakStyle</h1>
+      <nav class="space-x-4 text-sm text-gray-700">
+        <button onclick="showPage('mainPage')" class="hover:text-black">🏠 Главная</button>
+        <button onclick="showPage('cartPage'); loadCart()" class="hover:text-black">🛒 Корзина</button>
+        <button onclick="showPage('checkoutPage')" class="hover:text-black">💳 Оформление</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Аутентификация -->
+  <div id="authPage" class="page active">
+    <div class="flex flex-col items-center justify-center h-screen px-4">
+      <h2 class="text-2xl font-bold mb-4">Вход в аккаунт SneakStyle</h2>
+      <input id="emailInput" type="email" placeholder="Email" class="mb-2 p-2 border rounded w-full max-w-xs" required>
+      <input id="passwordInput" type="password" placeholder="Пароль" class="mb-4 p-2 border rounded w-full max-w-xs" required>
+      <button onclick="login()" class="bg-black text-white px-4 py-2 rounded w-full max-w-xs">Войти</button>
+      <p class="text-sm text-gray-500 mt-2">Для входа используйте email и пароль</p>
+    </div>
+  </div>
+
+  <!-- Главная -->
+  <div id="mainPage" class="page">
+    <div class="p-4 flex flex-col sm:flex-row gap-3">
+      <input id="searchInput" oninput="renderProducts()" type="text" placeholder="Поиск" class="p-2 rounded border w-full sm:w-1/3" />
+      <input id="minPrice" oninput="renderProducts()" type="number" placeholder="Мин цена" class="p-2 rounded border w-full sm:w-1/6" />
+      <input id="maxPrice" oninput="renderProducts()" type="number" placeholder="Макс цена" class="p-2 rounded border w-full sm:w-1/6" />
+    </div>
+    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="product-list"></div>
+  </div>
+
+  <!-- Страница товара -->
+  <div id="productPage" class="page">
+    <header class="p-4 bg-white shadow flex justify-between items-center">
+      <button onclick="showPage('mainPage')" class="text-blue-600 underline">← Назад</button>
+      <h2 class="text-lg font-bold">Товар</h2>
+    </header>
+    <div id="productDetails" class="p-4"></div>
+  </div>
+
+  <!-- Корзина -->
+  <div id="cartPage" class="page">
+    <header class="p-4 bg-white shadow flex justify-between items-center">
+      <h2 class="text-xl font-bold">Корзина</h2>
+      <button onclick="showPage('mainPage')" class="text-blue-500 underline">← Назад</button>
+    </header>
+    <section class="p-4" id="cart-items"></section>
+  </div>
+
+  <!-- Оформление -->
+  <div id="checkoutPage" class="page">
+    <header class="p-4 bg-white shadow flex justify-between items-center">
+      <h2 class="text-xl font-bold">Оформление заказа</h2>
+      <button onclick="showPage('cartPage')" class="text-blue-500 underline">← Назад</button>
+    </header>
+    <div class="p-4 space-y-4">
+      <p class="text-lg">Выберите способ оплаты:</p>
+      <button onclick="confirmOrder('Telegram')" class="w-full bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 rounded">Связаться в Telegram</button>
+    </div>
+  </div>
+
+  <!-- Подтверждение -->
+  <div id="confirmationPage" class="page text-center p-8">
+    <h2 class="text-2xl font-bold mb-4">Спасибо за заказ! 🎉</h2>
+    <p id="orderMessage" class="text-lg mb-6"></p>
+    <button onclick="clearCartAndReturn()" class="bg-black text-white px-6 py-2 rounded">На главную</button>
+  </div>
+
+  <script>
+    function login() {
+      const email = document.getElementById('emailInput').value;
+      const password = document.getElementById('passwordInput').value;
+      if (!email || !password) {
+        alert('Пожалуйста, введите email и пароль');
+        return;
+      }
+      localStorage.setItem('user', JSON.stringify({ email }));
+      document.getElementById('mainHeader').style.display = 'block';
+      showPage('mainPage');
+    }
+
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.getElementById('mainHeader').style.display = id === 'authPage' ? 'none' : 'block';
+    }
   </script>
 </body>
 </html>
