@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Poizon Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .page { display: none; }
+    .page.active { display: block; }
+  </style>
+</head>
+<body class="bg-gray-100 pb-24 font-sans">
+
+  <!-- Главная страница -->
+  <div id="mainPage" class="page active">
+
+    <header class="p-4 bg-white shadow">
+      <h1 class="text-xl font-bold">Poizon Shop</h1>
+    </header>
+
+    <section class="p-4">
+      <div class="bg-white rounded-xl p-4 shadow">
+        <img src="photo_2025-04-13_15-07-30.jpg" alt="NIKE Air Force 1" class="rounded mb-2 w-full" />
+        <p class="text-lg font-semibold">NIKE Air Force 1 '07</p>
+        <p class="text-green-600 font-bold mb-2">24 999 ₽</p>
+        <button
+          class="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+          onclick="addToCart('NIKE Air Force 1', 24999, 'photo_2025-04-13_15-07-30.jpg')"
+        >
+          Купить
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Страница корзины -->
+  <div id="cartPage" class="page">
+    <header class="p-4 bg-white shadow flex justify-between items-center">
+      <h2 class="text-xl font-bold">Корзина 🛒</h2>
+      <button onclick="showPage('mainPage')" class="text-blue-500 underline">Назад</button>
+    </header>
+
+    <section class="p-4" id="cart-items">
+      <!-- Товары появятся тут -->
+    </section>
+  </div>
+
+  <!-- Меню -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white shadow p-2 flex justify-around text-sm text-gray-700">
+    <button onclick="showPage('mainPage')" class="text-center">
+      <span>🏠</span>
+      <p>Главная</p>
+    </button>
+    <button onclick="showPage('cartPage'); loadCart();" class="text-center">
+      <span>🛒</span>
+      <p>Корзина</p>
+    </button>
+  </nav>
+
+  <!-- Скрипт -->
+  <script>
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function addToCart(name, price, image) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push({ name, price, image });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Товар добавлен в корзину!');
+    }
+
+    function loadCart() {
+      const container = document.getElementById('cart-items');
+      container.innerHTML = '';
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      if (cart.length === 0) {
+        container.innerHTML = "<p class='text-center text-gray-500'>Корзина пуста</p>";
+        return;
+      }
+
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price;
+
+        const div = document.createElement('div');
+        div.className = "bg-white p-4 mb-4 rounded-xl shadow";
+        div.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="w-full rounded mb-2">
+          <h3 class="text-lg font-semibold">${item.name}</h3>
+          <p class="text-green-600 font-bold mb-2">${item.price.toLocaleString()} ₽</p>
+          <button onclick="removeItem(${index})" class="text-red-500 underline text-sm">Удалить</button>
+        `;
+        container.appendChild(div);
+      });
+
+      const totalDiv = document.createElement('div');
+      totalDiv.className = "text-right text-xl font-bold mt-4";
+      totalDiv.textContent = `Итого: ${total.toLocaleString()} ₽`;
+      container.appendChild(totalDiv);
+    }
+
+    function removeItem(index) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      loadCart();
+    }
+  </script>
+</body>
+</html>
