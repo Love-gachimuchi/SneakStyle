@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Poizon Shop</title>
+  <title>SneakStyle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -12,111 +12,136 @@
 </head>
 <body class="bg-gray-100 pb-24 font-sans">
 
-  <!-- Главная страница -->
+  <!-- Главная -->
   <div id="mainPage" class="page active">
-    <header class="p-4 bg-black text-white shadow flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Poizon</h1>
-      <span class="text-sm opacity-70">Оригинальная обувь и одежда</span>
+    <header class="p-4 bg-black text-white flex justify-between items-center">
+      <h1 class="text-xl font-bold">SneakStyle</h1>
+      <button onclick="showPage('cartPage'); loadCart()" class="text-white">🛒</button>
     </header>
 
-    <!-- Баннер -->
-    <section class="p-4">
-      <div class="rounded-2xl bg-gradient-to-r from-lime-400 to-green-500 text-white p-6 shadow-xl">
-        <h2 class="text-xl font-bold mb-1">🔥 Весенняя распродажа</h2>
-        <p>Скидки до 50% на избранные товары</p>
-      </div>
-    </section>
-
-    <!-- Категории -->
-    <section class="p-4">
-      <h3 class="text-lg font-semibold mb-2">Категории</h3>
-      <div class="grid grid-cols-3 gap-4 text-center text-sm">
-        <button onclick="filterCategory('all')" class="bg-white rounded-xl p-4 shadow hover:bg-gray-100">Все</button>
-        <button onclick="filterCategory('shoes')" class="bg-white rounded-xl p-4 shadow hover:bg-gray-100">Обувь</button>
-        <button onclick="filterCategory('clothes')" class="bg-white rounded-xl p-4 shadow hover:bg-gray-100">Одежда</button>
-        <button onclick="filterCategory('accessories')" class="bg-white rounded-xl p-4 shadow hover:bg-gray-100">Аксессуары</button>
-      </div>
-    </section>
+    <!-- Поиск и фильтр -->
+    <div class="p-4 flex flex-col sm:flex-row gap-3">
+      <input id="searchInput" oninput="renderProducts()" type="text" placeholder="Поиск" class="p-2 rounded border w-full sm:w-1/3" />
+      <input id="minPrice" oninput="renderProducts()" type="number" placeholder="Мин цена" class="p-2 rounded border w-full sm:w-1/6" />
+      <input id="maxPrice" oninput="renderProducts()" type="number" placeholder="Макс цена" class="p-2 rounded border w-full sm:w-1/6" />
+    </div>
 
     <!-- Товары -->
-    <section class="p-4 grid gap-4" id="product-list">
-      <!-- Обувь -->
-      <div class="product bg-white rounded-xl p-4 shadow" data-category="shoes">
-        <img src="photo_2025-04-13_15-07-30.jpg" alt="NIKE Air Force 1" class="rounded mb-2 w-full" />
-        <p class="text-lg font-semibold">NIKE Air Force 1 '07</p>
-        <p class="text-green-600 font-bold mb-2">24 999 ₽</p>
-        <button
-          class="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
-          onclick="addToCart('NIKE Air Force 1', 24999, 'photo_2025-04-13_15-07-30.jpg')"
-        >
-          Купить
-        </button>
-      </div>
+    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="product-list"></div>
+  </div>
 
-      <!-- Одежда -->
-      <div class="product bg-white rounded-xl p-4 shadow" data-category="clothes">
-        <img src="https://via.placeholder.com/400x300?text=Hoodie" class="rounded mb-2 w-full" />
-        <p class="text-lg font-semibold">Poizon Худи</p>
-        <p class="text-green-600 font-bold mb-2">8 990 ₽</p>
-        <button
-          class="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
-          onclick="addToCart('Худи Poizon', 8990, 'https://via.placeholder.com/400x300?text=Hoodie')"
-        >
-          Купить
-        </button>
-      </div>
-
-      <!-- Аксессуары -->
-      <div class="product bg-white rounded-xl p-4 shadow" data-category="accessories">
-        <img src="https://via.placeholder.com/400x300?text=Cap" class="rounded mb-2 w-full" />
-        <p class="text-lg font-semibold">Poizon Кепка</p>
-        <p class="text-green-600 font-bold mb-2">2 990 ₽</p>
-        <button
-          class="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
-          onclick="addToCart('Кепка Poizon', 2990, 'https://via.placeholder.com/400x300?text=Cap')"
-        >
-          Купить
-        </button>
-      </div>
-    </section>
+  <!-- Страница товара -->
+  <div id="productPage" class="page">
+    <header class="p-4 bg-white shadow flex justify-between items-center">
+      <button onclick="showPage('mainPage')" class="text-blue-600 underline">← Назад</button>
+      <h2 class="text-lg font-bold">Товар</h2>
+    </header>
+    <div id="productDetails" class="p-4"></div>
   </div>
 
   <!-- Корзина -->
   <div id="cartPage" class="page">
     <header class="p-4 bg-white shadow flex justify-between items-center">
-      <h2 class="text-xl font-bold">Корзина 🛒</h2>
+      <h2 class="text-xl font-bold">Корзина</h2>
       <button onclick="showPage('mainPage')" class="text-blue-500 underline">← Назад</button>
     </header>
-
-    <section class="p-4" id="cart-items">
-      <!-- Сюда добавятся товары -->
-    </section>
+    <section class="p-4" id="cart-items"></section>
   </div>
 
-  <!-- Меню -->
+  <!-- Оформление -->
+  <div id="checkoutPage" class="page">
+    <header class="p-4 bg-white shadow flex justify-between items-center">
+      <h2 class="text-xl font-bold">Оформление заказа</h2>
+      <button onclick="showPage('cartPage')" class="text-blue-500 underline">← Назад</button>
+    </header>
+    <div class="p-4 space-y-4">
+      <p class="text-lg">Выберите способ оплаты:</p>
+      <button onclick="confirmOrder('Тинькофф')" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Оплатить через Тинькофф</button>
+      <button onclick="confirmOrder('СБП')" class="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-2 rounded">Оплатить через СБП</button>
+    </div>
+  </div>
+
+  <!-- Подтверждение -->
+  <div id="confirmationPage" class="page text-center p-8">
+    <h2 class="text-2xl font-bold mb-4">Спасибо за заказ! 🎉</h2>
+    <p id="orderMessage" class="text-lg mb-6"></p>
+    <button onclick="clearCartAndReturn()" class="bg-black text-white px-6 py-2 rounded">На главную</button>
+  </div>
+
+  <!-- Навигация -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white shadow p-2 flex justify-around text-sm text-gray-700">
-    <button onclick="showPage('mainPage')" class="text-center">
-      <span>🏠</span>
-      <p>Главная</p>
-    </button>
-    <button onclick="showPage('cartPage'); loadCart();" class="text-center">
-      <span>🛒</span>
-      <p>Корзина</p>
-    </button>
+    <button onclick="showPage('mainPage')" class="text-center">🏠<p>Главная</p></button>
+    <button onclick="showPage('cartPage'); loadCart()" class="text-center">🛒<p>Корзина</p></button>
   </nav>
 
-  <!-- Скрипты -->
   <script>
+    const products = [
+      {
+        name: "NIKE Air Force 1 '07",
+        price: 24999,
+        image: "photo_2025-04-13_15-07-30.jpg",
+        description: "Классические кроссовки NIKE Air Force 1 в обновлённом дизайне. Верх из натуральной кожи, резиновая подошва и культовый стиль 80-х.",
+      },
+      {
+        name: "Nike Air Max 90",
+        price: 19990,
+        image: "https://via.placeholder.com/400x300?text=AirMax",
+        description: "Легендарная модель с амортизацией Air. Современный комфорт и винтажный стиль в одном.",
+      },
+      {
+        name: "Air Jordan 1 Retro",
+        price: 29990,
+        image: "https://via.placeholder.com/400x300?text=Jordan",
+        description: "Обновлённая версия культовых Jordan 1. Верх из премиальной кожи, отличная посадка и дерзкий стиль.",
+      },
+    ];
+
     function showPage(id) {
-      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+    }
+
+    function renderProducts() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const min = parseInt(document.getElementById("minPrice").value) || 0;
+      const max = parseInt(document.getElementById("maxPrice").value) || Infinity;
+      const container = document.getElementById("product-list");
+      container.innerHTML = "";
+
+      products.filter(p =>
+        p.name.toLowerCase().includes(search) &&
+        p.price >= min && p.price <= max
+      ).forEach((p, i) => {
+        const div = document.createElement("div");
+        div.className = "bg-white rounded-xl p-3 shadow text-sm cursor-pointer";
+        div.onclick = () => showProduct(i);
+        div.innerHTML = `
+          <img src="${p.image}" class="rounded w-full h-40 object-cover mb-2">
+          <p class="font-semibold">${p.name}</p>
+          <p class="text-green-600 font-bold">${p.price.toLocaleString()} ₽</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function showProduct(index) {
+      const p = products[index];
+      const page = document.getElementById("productDetails");
+      page.innerHTML = `
+        <img src="${p.image}" class="rounded-xl w-full h-64 object-cover mb-4" />
+        <h2 class="text-xl font-bold">${p.name}</h2>
+        <p class="text-green-600 font-bold text-lg mb-2">${p.price.toLocaleString()} ₽</p>
+        <p class="text-gray-700 mb-4">${p.description}</p>
+        <button onclick="addToCart('${p.name}', ${p.price}, '${p.image}')" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">Добавить в корзину</button>
+      `;
+      showPage('productPage');
     }
 
     function addToCart(name, price, image) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       cart.push({ name, price, image });
       localStorage.setItem('cart', JSON.stringify(cart));
-      alert('Товар добавлен в корзину!');
+      alert("Добавлено в корзину!");
     }
 
     function loadCart() {
@@ -132,12 +157,11 @@
       let total = 0;
       cart.forEach((item, index) => {
         total += item.price;
-
         const div = document.createElement('div');
-        div.className = "bg-white p-4 mb-4 rounded-xl shadow";
+        div.className = "bg-white p-4 mb-4 rounded-xl shadow text-sm";
         div.innerHTML = `
-          <img src="${item.image}" alt="${item.name}" class="w-full rounded mb-2">
-          <h3 class="text-lg font-semibold">${item.name}</h3>
+          <img src="${item.image}" alt="${item.name}" class="w-full rounded mb-2 h-32 object-cover">
+          <h3 class="font-semibold">${item.name}</h3>
           <p class="text-green-600 font-bold mb-2">${item.price.toLocaleString()} ₽</p>
           <button onclick="removeItem(${index})" class="text-red-500 underline text-sm">Удалить</button>
         `;
@@ -145,9 +169,15 @@
       });
 
       const totalDiv = document.createElement('div');
-      totalDiv.className = "text-right text-xl font-bold mt-4";
+      totalDiv.className = "text-right text-base font-bold mt-4 mb-4";
       totalDiv.textContent = `Итого: ${total.toLocaleString()} ₽`;
       container.appendChild(totalDiv);
+
+      const orderBtn = document.createElement('button');
+      orderBtn.textContent = "Оформить заказ";
+      orderBtn.className = "w-full bg-black text-white py-2 rounded hover:bg-gray-800";
+      orderBtn.onclick = () => showPage('checkoutPage');
+      container.appendChild(orderBtn);
     }
 
     function removeItem(index) {
@@ -157,13 +187,19 @@
       loadCart();
     }
 
-    function filterCategory(category) {
-      const products = document.querySelectorAll('.product');
-      products.forEach(product => {
-        const matches = product.dataset.category === category || category === 'all';
-        product.style.display = matches ? 'block' : 'none';
-      });
+    function confirmOrder(method) {
+      const message = document.getElementById("orderMessage");
+      message.textContent = `Вы выбрали оплату через ${method}. Ваш заказ успешно оформлен.`;
+      showPage('confirmationPage');
     }
+
+    function clearCartAndReturn() {
+      localStorage.removeItem("cart");
+      renderProducts();
+      showPage("mainPage");
+    }
+
+    renderProducts();
   </script>
 </body>
 </html>
