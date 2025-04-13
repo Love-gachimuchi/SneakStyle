@@ -168,7 +168,7 @@
         <h2 class="text-xl font-bold">${p.name}</h2>
         <p class="text-green-600 font-bold text-lg mb-2">${p.price.toLocaleString()} ₽</p>
         <p class="text-gray-700 mb-4">${p.description}</p>
-        <button onclick="addToCart('${p.name}', ${p.price}, '${p.image}')" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">Добавить в корзину</button>
+        <button onclick='addToCart(${JSON.stringify(p.name)}, ${p.price}, ${JSON.stringify(p.image)})' class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">Добавить в корзину</button>
       `;
       showPage('productPage');
     }
